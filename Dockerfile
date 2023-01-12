@@ -1,11 +1,20 @@
-FROM eclipse-temurin:17-jdk-focal
+#FROM openjdk:11-jdk-slim as builder
+#COPY . /app
+#WORKDIR /app
+#RUN ./mvnw clean package -DskipTests
+#
+#FROM openjdk:11-jre-slim
+#COPY --from=builder /app/target/*.jar /app/app.jar
+#COPY application.properties /resources/application.properties
+#
+#ENV JAVA_OPTS=""
+#ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dspring.config.location=file:/app/application.properties -jar /app/app.jar"]
 
-WORKDIR /app
+#
+#
+FROM openjdk:8
 
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
+COPY target/Blog-0.0.1-SNAPSHOT.jar Blog-0.0.1-SNAPSHOT.jar
 
-COPY src ./src
+ENTRYPOINT ["java","-jar","/app.jar"]
 
-CMD ["./mvnw", "spring-boot:run"]
