@@ -2,6 +2,8 @@ package TechStory.Blog.controllers;
 import TechStory.Blog.models.Author;
 import TechStory.Blog.repositories.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/authors")
 public class AuthorController {
@@ -16,23 +19,28 @@ public class AuthorController {
     @Autowired
     private AuthorRepository authorRepository;
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/")
-    public List<Author> getAuthors() {
-        return authorRepository.findAll();
+    public ResponseEntity<List<Author>> getAuthors() {
+        return new ResponseEntity<>(authorRepository.findAll(), HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/")
-    public Author addAuthor(@RequestBody Author author) {
-        return authorRepository.save(author);
+    public ResponseEntity<Author> addAuthor(@RequestBody Author author) {
+
+        return new ResponseEntity<>(authorRepository.save(author), HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/{id}")
-    public Author getAuthor(@PathVariable int id) {
-        return authorRepository.findById(id).orElse(null);
+    public ResponseEntity<Author> getAuthor(@PathVariable int id) {
+        return new ResponseEntity<>(authorRepository.findById(id).orElse(null), HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
     @PutMapping("/{id}")
-    public Author updateAuthor(@PathVariable int id, @RequestBody Author author) {
+    public ResponseEntity<Author> updateAuthor(@PathVariable int id, @RequestBody Author author) {
         Optional<Author> optionalAuthor = authorRepository.findById(id);
         if (!optionalAuthor.isPresent()) {
             return null;
@@ -42,8 +50,10 @@ public class AuthorController {
         existingAuthor.setLastName(author.getLastName());
         existingAuthor.setEmail(author.getEmail());
         existingAuthor.setCoverPhoto(author.getCoverPhoto());
-        return authorRepository.save(existingAuthor);
+        return new ResponseEntity<>(authorRepository.save(existingAuthor), HttpStatus.OK);
     }
+
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{id}")
     public void deleteAuthor(@PathVariable int id) {
         authorRepository.deleteById(id);

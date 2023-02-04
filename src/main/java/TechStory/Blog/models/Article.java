@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 @Table(name = "articles")
 public class Article {
@@ -22,8 +23,14 @@ public class Article {
     @Column(nullable = false, length = 10000)
     private String content;
 
-    private int likes;
+    @Column(nullable = false)
+    private String coverPhotoUrl;
 
+    @Column(nullable = false)
+    private String contentPreview;
+
+    @Column(nullable = false)
+    private int likes;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<Comment> comments;
@@ -102,5 +109,21 @@ public class Article {
 
     public void setAuthorId(int authorId) {
         this.authorId = authorId;
+    }
+
+    public String getCoverPhotoUrl() {
+        return coverPhotoUrl;
+    }
+
+    public void setCoverPhotoUrl(String coverPhotoUrl) {
+        this.coverPhotoUrl = coverPhotoUrl;
+    }
+
+    public String getContentPreview() {
+        return contentPreview;
+    }
+
+    public void setContentPreview(String contentPreview) {
+        this.contentPreview = contentPreview;
     }
 }
